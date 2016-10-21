@@ -92,6 +92,7 @@ class Article < Content
                                :send_pings, :send_notifications,
                                :published_at=, :just_published?])
 
+
   include Article::States
 
   class << self
@@ -103,11 +104,24 @@ class Article < Content
       article
     end
 
+    def merge_with(other_id)
+      other_article = Article.find(other_id)
+      both_bodies = "#{body}+" "+#{other_article.body}"
+      #save the updated attributes
+      update.attributes!(body: both_bodies)
+      other_article.comments.each do |comment|
+        self.commments << comment
+      end
+      other_article.delete
+    end
+
+
+
     def search_with_pagination(search_hash, paginate_hash)
-      
+
       state = (search_hash[:state] and ["no_draft", "drafts", "published", "withdrawn", "pending"].include? search_hash[:state]) ? search_hash[:state] : 'no_draft'
-      
-      
+
+
       list_function  = ["Article.#{state}"] + function_search_no_draft(search_hash)
 
       if search_hash[:category] and search_hash[:category].to_i > 0
