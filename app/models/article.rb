@@ -86,7 +86,7 @@ class Article < Content
     #save the updated attributes
     update_attributes!(body: both_bodies)
     other_article.comments.each do |comment|
-      self.commments << comment
+      self.comments << comment
     end
     other_article.delete
   end
