@@ -34,6 +34,7 @@ class Admin::ContentController < Admin::BaseController
       flash[:error] = _("Error, you are not allowed to perform this action")
       return
     end
+    @user_is_admin = current_user.admin?
     new_or_edit
   end
 
@@ -57,8 +58,6 @@ class Admin::ContentController < Admin::BaseController
        redirect_to :action => 'edit', :id => params[:id]
      end
    end
-
-
 
 
   def destroy

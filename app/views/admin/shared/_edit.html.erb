@@ -4,9 +4,9 @@
   <%= render :partial => "form" %>
 
 <% end %>
-logger.info(@user_is_admin)
+
 <% if @user_is_admin %>
-    <h4>Merge Articles</h4>
+    <h4> Merge Articles </h4>
     <% merge_action = "/admin/content/merge/#{@article.id}" %>
     <%= form_tag(merge_action, multipart: true) do %>
       <%= label_tag 'merge_with', 'Article ID' %>
