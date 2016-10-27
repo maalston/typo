@@ -80,6 +80,18 @@ class Article < Content
     Article.exists?({:parent_id => self.id})
   end
 
+  def merge_with(other_id)
+    other_article = Article.find(other_id)
+    both_bodies = "#{body}\s#{other_article.body}"
+    #save the updated attributes
+    update_attributes!(body: both_bodies)
+    other_article.comments.each do |comment|
+      self.commments << comment
+    end
+    other_article.delete
+  end
+
+
   attr_accessor :draft, :keywords
 
   has_state(:state,
@@ -103,18 +115,6 @@ class Article < Content
       end
       article
     end
-
-    def merge_with(other_id)
-      other_article = Article.find(other_id)
-      both_bodies = "#{body}+" "+#{other_article.body}"
-      #save the updated attributes
-      update.attributes!(body: both_bodies)
-      other_article.comments.each do |comment|
-        self.commments << comment
-      end
-      other_article.delete
-    end
-
 
 
     def search_with_pagination(search_hash, paginate_hash)

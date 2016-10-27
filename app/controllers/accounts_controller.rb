@@ -99,6 +99,7 @@ class AccountsController < ApplicationController
     chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
     newpass = ""
     1.upto(7) { |i| newpass << chars[rand(chars.size-1)] }
+    # use this to find password logger.info('password = '"#{newpass}")
     return newpass
   end
 

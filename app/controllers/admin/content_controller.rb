@@ -46,17 +46,18 @@ class Admin::ContentController < Admin::BaseController
        return
      end
      #get current article
-     @article = Article.find[:id]
+     @article = Article.find(params[:id])
      #get other article
      other_id = params[:merge_with]
      # call the merge method in the model
      begin
-       @article.merge(other_id)
-     rescue
+       @article.merge_with(other_id)
+     rescue => e
        logger.info(e.message)
        flash[:error]= _(e.message)
-       redirect_to :action => 'edit', :id => params[:id]
+       #redirect_to :action => 'edit', :id => params[:id]
      end
+      redirect_to :action => 'edit', :id => params[:id]
    end
 
 
@@ -212,6 +213,8 @@ class Admin::ContentController < Admin::BaseController
       flash[:notice] = _('Article was successfully created')
     when 'edit'
       flash[:notice] = _('Article was successfully updated.')
+    when 'merge'
+      flash[:notice] = _("Articles were merged successfully.")
     else
       raise "I don't know how to tidy up action: #{params[:action]}"
     end
